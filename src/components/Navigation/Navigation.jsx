@@ -1,7 +1,7 @@
 
 const Navigation = () => {
     return (
-        <nav>
+        <nav style={{display: 'flex', justifyContent: 'flex-end'}}>
             <p>Sign Out</p>
         </nav>
     );
