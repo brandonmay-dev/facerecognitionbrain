@@ -1,4 +1,4 @@
-import Navigation from './components/Navigation/Navigation.jsx';
+import Navigation from './components/Navigation/Navigation.jsx'
 import './App.css'
 
 function App() {
@@ -7,9 +7,9 @@ function App() {
       <div>
         <h1>Hello, World!</h1>
         <Navigation />
-        <Logo />
-        <ImageLinkForm />
-        <FaceRecognition />
+        {/* <Logo /> */}
+      {/* <ImageLinkForm /> */}
+      {/* <FaceRecognition /> */}
       </div>
   )
 }
