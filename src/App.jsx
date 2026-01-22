@@ -1,4 +1,5 @@
 import Navigation from './components/Navigation/Navigation.jsx'
+import Logo from './components/Logo/Logo.jsx'
 import './App.css'
 
 function App() {
@@ -6,7 +7,7 @@ function App() {
   return (
       <div>
         <Navigation />
-        {/* <Logo /> */}
+        <Logo />
       {/* <ImageLinkForm /> */}
       {/* <FaceRecognition /> */}
       </div>
