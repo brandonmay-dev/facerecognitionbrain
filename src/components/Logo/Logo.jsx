@@ -4,7 +4,7 @@ import './Logo.css';
 const Logo = () => {
   return (
     <Tilt>
-      <div className='ma4 mt0' style={{ height: '150px' }}>
+      <div className='ma4 mt0' style={{ height: '250px' }}>
         <h1>React Parallax Tilt 👀</h1>
       </div>
     </Tilt>
