@@ -9,8 +9,8 @@ function App() {
     <div>
       <Navigation />
       <Logo />
-      <ImageLinkForm />
       <Rank />
+      <ImageLinkForm />
       {/* <FaceRecognition /> */}
     </div>
   );
