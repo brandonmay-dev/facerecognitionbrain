@@ -1,3 +1,5 @@
+import "./ImageLinkForm.css";
+
 const ImageLinkForm = () => {
   return (
     <div>
