@@ -1,3 +1,18 @@
 .tilt {
   background: linear-gradient(to right, rgb(61, 21, 253), rgb(169, 111, 147));
 }
+
+.logo-container {
+  height: 250px;
+  padding-top: 5px;
+}
+
+.logo-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.logo-image {
+  height: 40px;
+}
