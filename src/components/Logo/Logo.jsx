@@ -6,10 +6,7 @@ const Logo = () => {
   return (
     <Tilt className="tilt">
       <div className="ma4 mt0 tilt-inner pa3 logo-container">
-        <h1 className="logo-title">
-          React Parallax Tilt
-          <img src={brain} alt="Brain logo" className="logo-image" />
-        </h1>
+        <img src={brain} alt="Brain logo" className="logo-image" />
       </div>
     </Tilt>
   );
