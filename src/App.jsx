@@ -14,7 +14,7 @@ function App() {
   }
 
 onInputChange = (event) => {
-    console.log(event);
+    console.log(event.target.value);
   }
 
   return (
