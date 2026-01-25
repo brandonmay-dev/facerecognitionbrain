@@ -1,3 +1,4 @@
+import { useState } from "react";
 import Navigation from "./components/Navigation/Navigation.jsx";
 import Logo from "./components/Logo/Logo.jsx";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.jsx";
@@ -6,16 +7,12 @@ import ParticlesBg from "particles-bg";
 import "./App.css";
 
 function App() {
-  constructor(
-    super();
-    this.state = {
-      input: "", 
-    };
-  }
+  const [input, setInput] = useState("");
 
-onInputChange = (event) => {
+  const onInputChange = (event) => {
+    setInput(event.target.value);
     console.log(event.target.value);
-  }
+  };
 
   return (
     <div>
@@ -23,7 +20,7 @@ onInputChange = (event) => {
       <Navigation />
       <Logo />
       <Rank />
-      <ImageLinkForm onInputChange={this.onInputChange} />
+      <ImageLinkForm onInputChange={onInputChange} />
       {/* <FaceRecognition /> */}
     </div>
   );
