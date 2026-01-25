@@ -11,7 +11,6 @@ const ImageLinkForm = ({ onInputChange, onButtonsubmit }) => {
         <input
           className="f4 pa2 w-70 center"
           type="text"
-          value={input}
           onChange={onInputChange}
         />
         <button
