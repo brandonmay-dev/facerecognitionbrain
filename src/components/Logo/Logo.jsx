@@ -5,7 +5,7 @@ import "./Logo.css";
 const Logo = () => {
   return (
     <Tilt className="tilt">
-      <div className="ma4 mt0 tilt-inner pa2 logo-container">
+      <div className="tilt-inner logo-container">
         <img src={brain} alt="Brain logo" className="logo-image" />
       </div>
     </Tilt>

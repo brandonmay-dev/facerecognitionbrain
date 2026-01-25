@@ -1,5 +1,6 @@
 .tilt {
   background: linear-gradient(to right, rgb(61, 21, 253), rgb(169, 111, 147));
+  display: inline-block;
 }
 
 .logo-container {
