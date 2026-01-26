@@ -10,37 +10,34 @@ import "./App.css";
 function App() {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
-  const [box, setBox] = useState(null);
+  const [clarifaiBox, setClarifaiBox] = useState(null);
+
+  const calculateFaceLocation = (clarifaiBox) => {
+    if (!clarifaiBox) return null;
+
+    const width = clarifaiBox.right_col - clarifaiBox.left_col;
+    const height = clarifaiBox.bottom_row - clarifaiBox.top_row;
+
+    return {
+      leftCol: clarifaiBox.left_col,
+      topRow: clarifaiBox.top_row,
+      rightCol: width,
+      bottomRow: height,
+    };
+  };
 
   const onInputChange = (event) => {
     setInput(event.target.value);
   };
 
-  // Clarifai config (public app while learning)
-  const PAT = import.meta.env.VITE_CLARIFAI_PAT; // set in .env
+  const PAT = import.meta.env.VITE_CLARIFAI_PAT;
   const USER_ID = "clarifai";
   const APP_ID = "main";
   const MODEL_ID = "face-detection";
 
-  const calculateFaceLocation = (data) => {
-    const boundingBox =
-      data.outputs[0].data.regions[0].region_info.bounding_box;
-
-    const image = document.getElementById("inputimage");
-    const width = Number(image.width);
-    const height = Number(image.height);
-
-    return {
-      leftCol: boundingBox.left_col * width,
-      topRow: boundingBox.top_row * height,
-      rightCol: width - boundingBox.right_col * width,
-      bottomRow: height - boundingBox.bottom_row * height,
-    };
-  };
-
   const onButtonsubmit = () => {
-    setImageUrl(input); // show the image immediately
-    setBox(null); // clear previous box
+    setImageUrl(input);
+    setClarifaiBox(null);
 
     fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/outputs`, {
       method: "POST",
@@ -49,25 +46,24 @@ function App() {
         Authorization: `Key ${PAT}`,
       },
       body: JSON.stringify({
-        user_app_id: {
-          user_id: USER_ID,
-          app_id: APP_ID,
-        },
-        inputs: [
-          {
-            data: {
-              image: { url: input },
-            },
-          },
-        ],
+        user_app_id: { user_id: USER_ID, app_id: APP_ID },
+        inputs: [{ data: { image: { url: input } } }],
       }),
     })
       .then((res) => res.json())
       .then((data) => {
         console.log("Clarifai response:", data);
 
-        const faceBox = calculateFaceLocation(data);
-        setBox(faceBox);
+        const region = data?.outputs?.[0]?.data?.regions?.[0];
+
+        if (!region) {
+          console.log("No face detected");
+          setClarifaiBox(null);
+          return;
+        }
+
+        // ✅ store ratios ONLY
+        setClarifaiBox(region.region_info.bounding_box);
       })
       .catch((err) => console.log("Clarifai error:", err));
   };
@@ -82,7 +78,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonsubmit={onButtonsubmit}
       />
-      <FaceRecognition imageUrl={imageUrl} box={box} />
+      <FaceRecognition imageUrl={imageUrl} clarifaiBox={clarifaiBox} />
     </div>
   );
 }
