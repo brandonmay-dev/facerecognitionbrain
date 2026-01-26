@@ -10,6 +10,7 @@ import "./App.css";
 function App() {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
+  const [box, setBox] = useState(null);
 
   const onInputChange = (event) => {
     setInput(event.target.value);
@@ -21,8 +22,25 @@ function App() {
   const APP_ID = "main";
   const MODEL_ID = "face-detection";
 
+  const calculateFaceLocation = (data) => {
+    const boundingBox =
+      data.outputs[0].data.regions[0].region_info.bounding_box;
+
+    const image = document.getElementById("inputimage");
+    const width = Number(image.width);
+    const height = Number(image.height);
+
+    return {
+      leftCol: boundingBox.left_col * width,
+      topRow: boundingBox.top_row * height,
+      rightCol: width - boundingBox.right_col * width,
+      bottomRow: height - boundingBox.bottom_row * height,
+    };
+  };
+
   const onButtonsubmit = () => {
     setImageUrl(input); // show the image immediately
+    setBox(null); // clear previous box
 
     fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/outputs`, {
       method: "POST",
@@ -47,7 +65,9 @@ function App() {
       .then((res) => res.json())
       .then((data) => {
         console.log("Clarifai response:", data);
-        // Next: set state for face boxes and pass to FaceRecognition
+
+        const faceBox = calculateFaceLocation(data);
+        setBox(faceBox);
       })
       .catch((err) => console.log("Clarifai error:", err));
   };
@@ -62,7 +82,7 @@ function App() {
         onInputChange={onInputChange}
         onButtonsubmit={onButtonsubmit}
       />
-      <FaceRecognition imageUrl={imageUrl} />
+      <FaceRecognition imageUrl={imageUrl} box={box} />
     </div>
   );
 }
