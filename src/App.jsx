@@ -15,8 +15,13 @@ class App extends Component {
       input: "",
       imageUrl: "",
       clarifaiBoxes: [],
+      route: "signin", // "signin" | "home"
     };
   }
+
+  onRouteChange = (route) => {
+    this.setState({ route });
+  };
 
   onInputChange = (event) => {
     this.setState({ input: event.target.value });
@@ -94,20 +99,29 @@ class App extends Component {
   };
 
   render() {
-    const { imageUrl, clarifaiBoxes } = this.state;
+    const { imageUrl, clarifaiBoxes, route } = this.state;
 
     return (
       <div>
         <ParticlesBg type="cobweb" bg={true} />
-        <Navigation />
-        <Signin />
-        <Logo />
-        <Rank />
-        <ImageLinkForm
-          onInputChange={this.onInputChange}
-          onButtonsubmit={this.onButtonsubmit}
-        />
-        <FaceRecognition imageUrl={imageUrl} clarifaiBoxes={clarifaiBoxes} />
+        <Navigation onRouteChange={this.onRouteChange} />
+
+        {route === "signin" ? (
+          <Signin onRouteChange={this.onRouteChange} />
+        ) : (
+          <>
+            <Logo />
+            <Rank />
+            <ImageLinkForm
+              onInputChange={this.onInputChange}
+              onButtonsubmit={this.onButtonsubmit}
+            />
+            <FaceRecognition
+              imageUrl={imageUrl}
+              clarifaiBoxes={clarifaiBoxes}
+            />
+          </>
+        )}
       </div>
     );
   }
