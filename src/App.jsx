@@ -28,8 +28,7 @@ class App extends Component {
     const image = document.getElementById("inputimage");
     if (!image) return [];
 
-    const width = Number(image.width);
-    const height = Number(image.height);
+    const { width, height } = image.getBoundingClientRect();
 
     return regions
       .map((r) => r?.region_info?.bounding_box)
