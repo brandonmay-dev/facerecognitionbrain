@@ -47,9 +47,6 @@ const Signin = () => {
             <a href="#0" className="f6 link dim black db">
               Sign up
             </a>
-            <a href="#0" className="f6 link dim black db">
-              Forgot your password?
-            </a>
           </div>
         </form>
       </main>
