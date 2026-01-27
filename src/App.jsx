@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition.jsx";
 import Navigation from "./components/Navigation/Navigation.jsx";
+import Signin from "./components/Signin/Signin.jsx";
 import Logo from "./components/Logo/Logo.jsx";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.jsx";
 import Rank from "./components/Rank/Rank.jsx";
@@ -99,6 +100,7 @@ class App extends Component {
       <div>
         <ParticlesBg type="cobweb" bg={true} />
         <Navigation />
+        <Signin />
         <Logo />
         <Rank />
         <ImageLinkForm
