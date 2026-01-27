@@ -13,7 +13,7 @@ class App extends Component {
     this.state = {
       input: "",
       imageUrl: "",
-      clarifaiBoxes: [], // ✅ multiple boxes
+      clarifaiBoxes: [],
     };
   }
 
@@ -28,17 +28,26 @@ class App extends Component {
     const image = document.getElementById("inputimage");
     if (!image) return [];
 
+    // Use rendered size (fixes offsets when image is scaled)
     const { width, height } = image.getBoundingClientRect();
+    const yOffset = height * 0.03; // tweak 0.02–0.04 if needed
 
     return regions
       .map((r) => r?.region_info?.bounding_box)
       .filter(Boolean)
-      .map((b) => ({
-        leftCol: b.left_col * width,
-        topRow: b.top_row * height,
-        rightCol: width - b.right_col * width,
-        bottomRow: height - b.bottom_row * height,
-      }));
+      .map((b) => {
+        const leftCol = b.left_col * width;
+        const topRow = b.top_row * height;
+        const rightCol = width - b.right_col * width;
+        const bottomRow = height - b.bottom_row * height;
+
+        return {
+          leftCol,
+          topRow: Math.max(topRow - yOffset, 0),
+          rightCol,
+          bottomRow,
+        };
+      });
   };
 
   displayFaceBoxes = (boxes) => {
@@ -58,7 +67,7 @@ class App extends Component {
 
     if (!PAT) {
       console.error(
-        "Missing Clarifai PAT. Add VITE_CLARIFAI_PAT to your .env file.",
+        "Missing Clarifai PAT. Add VITE_CLARIFAI_PAT to your .env.",
       );
       return;
     }
@@ -71,19 +80,8 @@ class App extends Component {
         "Content-Type": "application/json",
       },
       body: JSON.stringify({
-        user_app_id: {
-          user_id: USER_ID,
-          app_id: APP_ID,
-        },
-        inputs: [
-          {
-            data: {
-              image: {
-                url: imageUrl,
-              },
-            },
-          },
-        ],
+        user_app_id: { user_id: USER_ID, app_id: APP_ID },
+        inputs: [{ data: { image: { url: imageUrl } } }],
       }),
     })
       .then((res) => res.json())
