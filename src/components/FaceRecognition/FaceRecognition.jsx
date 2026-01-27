@@ -1,6 +1,6 @@
 import "./FaceRecognition.css";
 
-const FaceRecognition = ({ imageUrl, clarifaiBox }) => {
+const FaceRecognition = ({ imageUrl, clarifaiBoxes }) => {
   return (
     <div className="center">
       <div
@@ -16,18 +16,19 @@ const FaceRecognition = ({ imageUrl, clarifaiBox }) => {
               width="500px"
               height="auto"
             />
-
-            {clarifaiBox && (
-              <div
-                className="bounding-box"
-                style={{
-                  top: clarifaiBox.topRow,
-                  right: clarifaiBox.rightCol,
-                  bottom: clarifaiBox.bottomRow,
-                  left: clarifaiBox.leftCol,
-                }}
-              />
-            )}
+            {Array.isArray(clarifaiBoxes) &&
+              clarifaiBoxes.map((box, i) => (
+                <div
+                  key={i}
+                  className="bounding-box"
+                  style={{
+                    top: box.topRow,
+                    right: box.rightCol,
+                    bottom: box.bottomRow,
+                    left: box.leftCol,
+                  }}
+                />
+              ))}
           </>
         )}
       </div>
