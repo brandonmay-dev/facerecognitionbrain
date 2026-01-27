@@ -13,7 +13,7 @@ class App extends Component {
     this.state = {
       input: "",
       imageUrl: "",
-      clarifaiBox: null,
+      clarifaiBoxes: [], // ✅ multiple boxes
     };
   }
 
@@ -21,40 +21,41 @@ class App extends Component {
     this.setState({ input: event.target.value });
   };
 
-  calculateFaceLocation = (data) => {
-    const region =
-      data?.outputs?.[0]?.data?.regions?.[0]?.region_info?.bounding_box;
-
-    if (!region) return null;
+  calculateFaceLocations = (data) => {
+    const regions = data?.outputs?.[0]?.data?.regions || [];
+    if (!regions.length) return [];
 
     const image = document.getElementById("inputimage");
-    if (!image) return null;
+    if (!image) return [];
 
     const width = Number(image.width);
     const height = Number(image.height);
 
-    return {
-      leftCol: region.left_col * width,
-      topRow: region.top_row * height,
-      rightCol: width - region.right_col * width,
-      bottomRow: height - region.bottom_row * height,
-    };
+    return regions
+      .map((r) => r?.region_info?.bounding_box)
+      .filter(Boolean)
+      .map((b) => ({
+        leftCol: b.left_col * width,
+        topRow: b.top_row * height,
+        rightCol: width - b.right_col * width,
+        bottomRow: height - b.bottom_row * height,
+      }));
   };
 
-  displayFaceBox = (box) => {
-    this.setState({ clarifaiBox: box });
+  displayFaceBoxes = (boxes) => {
+    this.setState({ clarifaiBoxes: boxes });
   };
 
   onButtonsubmit = () => {
-    const PAT = import.meta.env.VITE_CLARIFAI_PAT; // ✅ put in .env
+    const PAT = import.meta.env.VITE_CLARIFAI_PAT;
     const USER_ID = "clarifai";
     const APP_ID = "main";
     const MODEL_ID = "face-detection";
 
     const imageUrl = this.state.input;
 
-    // Show the image immediately, clear old box
-    this.setState({ imageUrl, clarifaiBox: null });
+    // Show image immediately + clear old boxes
+    this.setState({ imageUrl, clarifaiBoxes: [] });
 
     if (!PAT) {
       console.error(
@@ -88,14 +89,14 @@ class App extends Component {
     })
       .then((res) => res.json())
       .then((data) => {
-        const box = this.calculateFaceLocation(data);
-        this.displayFaceBox(box);
+        const boxes = this.calculateFaceLocations(data);
+        this.displayFaceBoxes(boxes);
       })
       .catch((err) => console.log("Clarifai error:", err));
   };
 
   render() {
-    const { imageUrl, clarifaiBox } = this.state;
+    const { imageUrl, clarifaiBoxes } = this.state;
 
     return (
       <div>
@@ -107,7 +108,7 @@ class App extends Component {
           onInputChange={this.onInputChange}
           onButtonsubmit={this.onButtonsubmit}
         />
-        <FaceRecognition imageUrl={imageUrl} clarifaiBox={clarifaiBox} />
+        <FaceRecognition imageUrl={imageUrl} clarifaiBoxes={clarifaiBoxes} />
       </div>
     );
   }
