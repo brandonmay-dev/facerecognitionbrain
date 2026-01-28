@@ -22,7 +22,7 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    if (route === "signout") {
+    if (route === "signin") {
       this.setState({ isSignedIn: false });
     } else if (route === "home") {
       this.setState({ isSignedIn: true });
@@ -106,13 +106,13 @@ class App extends Component {
   };
 
   render() {
-    const { imageUrl, clarifaiBoxes, route } = this.state;
+    const { isSignedIn, imageUrl, clarifaiBoxes, route } = this.state;
 
     return (
       <div>
         <ParticlesBg type="cobweb" bg={true} />
         <Navigation
-          isSignedIn={this.state.isSignedIn}
+          isSignedIn={isSignedIn}
           onRouteChange={this.onRouteChange}
         />
 
