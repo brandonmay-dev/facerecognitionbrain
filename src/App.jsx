@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import FaceRecognition from "./components/FaceRecognition/FaceRecognition.jsx";
 import Navigation from "./components/Navigation/Navigation.jsx";
 import Signin from "./components/Signin/Signin.jsx";
+import Register from "./components/Register/Register.jsx";
 import Logo from "./components/Logo/Logo.jsx";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.jsx";
 import Rank from "./components/Rank/Rank.jsx";
@@ -106,9 +107,7 @@ class App extends Component {
         <ParticlesBg type="cobweb" bg={true} />
         <Navigation onRouteChange={this.onRouteChange} />
 
-        {route === "signin" ? (
-          <Signin onRouteChange={this.onRouteChange} />
-        ) : (
+        {route === "home" ? (
           <>
             <Logo />
             <Rank />
@@ -121,10 +120,14 @@ class App extends Component {
               clarifaiBoxes={clarifaiBoxes}
             />
           </>
+        ) : route === "signin" ? (
+          <Signin onRouteChange={this.onRouteChange} />
+        ) : (
+          <Register onRouteChange={this.onRouteChange} />
         )}
       </div>
     );
-  }
-}
+  } // ✅ closes render()
+} // ✅ closes class App
 
 export default App;
