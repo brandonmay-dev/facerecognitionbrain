@@ -20,7 +20,7 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    this.setState({ route });
+    this.setState({ route: route });
   };
 
   onInputChange = (event) => {
