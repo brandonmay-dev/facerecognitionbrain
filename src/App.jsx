@@ -16,7 +16,8 @@ class App extends Component {
       input: "",
       imageUrl: "",
       clarifaiBoxes: [],
-      route: "signin", // "signin" | "home"
+      route: "signin",
+      isSignedIn: false,
     };
   }
 
