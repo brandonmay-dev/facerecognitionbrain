@@ -22,12 +22,24 @@ class App extends Component {
   }
 
   onRouteChange = (route) => {
-    if (route === "signin" || route === "signout") {
-      this.setState({ isSignedIn: false });
-    } else if (route === "home") {
-      this.setState({ isSignedIn: true });
+    if (route === "signout") {
+      this.setState({
+        isSignedIn: false,
+        route: "signin",
+        imageUrl: "",
+        clarifaiBoxes: [],
+        input: "",
+      });
+      return;
     }
-    this.setState({ route: route });
+
+    if (route === "home") {
+      this.setState({ isSignedIn: true });
+    } else {
+      this.setState({ isSignedIn: false });
+    }
+
+    this.setState({ route });
   };
 
   onInputChange = (event) => {
