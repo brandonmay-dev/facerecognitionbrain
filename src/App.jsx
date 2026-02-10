@@ -21,6 +21,13 @@ class App extends Component {
     };
   }
 
+  componentDidMount() {
+    fetch("http://localhost:3001/")
+      .then((response) => response.json())
+      .then((data) => console.log("Server response:", data))
+      .catch((err) => console.log("Server error:", err));
+  }
+
   onRouteChange = (route) => {
     if (route === "signout") {
       this.setState({
@@ -33,11 +40,8 @@ class App extends Component {
       return;
     }
 
-    if (route === "home") {
-      this.setState({ isSignedIn: true });
-    } else {
-      this.setState({ isSignedIn: false });
-    }
+    if (route === "home") this.setState({ isSignedIn: true });
+    else this.setState({ isSignedIn: false });
 
     this.setState({ route });
   };
@@ -53,9 +57,7 @@ class App extends Component {
     const image = document.getElementById("inputimage");
     if (!image) return [];
 
-    // Use rendered size (fixes offsets when image is scaled)
     const { width, height } = image.getBoundingClientRect();
-    const yOffset = height * 0.03; // tweak 0.02–0.04 if needed
 
     return regions
       .map((r) => r?.region_info?.bounding_box)
@@ -66,12 +68,7 @@ class App extends Component {
         const rightCol = width - b.right_col * width;
         const bottomRow = height - b.bottom_row * height;
 
-        return {
-          leftCol,
-          topRow: Math.max(topRow - yOffset, 0),
-          rightCol,
-          bottomRow,
-        };
+        return { leftCol, topRow, rightCol, bottomRow };
       });
   };
 
@@ -80,41 +77,23 @@ class App extends Component {
   };
 
   onButtonsubmit = () => {
-    const PAT = import.meta.env.VITE_CLARIFAI_PAT;
-    const USER_ID = "clarifai";
-    const APP_ID = "main";
-    const MODEL_ID = "face-detection";
-
     const imageUrl = this.state.input;
 
-    // Show image immediately + clear old boxes
+    // show image immediately, clear old boxes
     this.setState({ imageUrl, clarifaiBoxes: [] });
 
-    if (!PAT) {
-      console.error(
-        "Missing Clarifai PAT. Add VITE_CLARIFAI_PAT to your .env.",
-      );
-      return;
-    }
-
-    fetch(`https://api.clarifai.com/v2/models/${MODEL_ID}/outputs`, {
+    // ✅ call YOUR backend (no CORS)
+    fetch("http://localhost:3001/imageurl", {
       method: "POST",
-      headers: {
-        Accept: "application/json",
-        Authorization: "Key " + PAT,
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({
-        user_app_id: { user_id: USER_ID, app_id: APP_ID },
-        inputs: [{ data: { image: { url: imageUrl } } }],
-      }),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ input: imageUrl }),
     })
       .then((res) => res.json())
       .then((data) => {
         const boxes = this.calculateFaceLocations(data);
         this.displayFaceBoxes(boxes);
       })
-      .catch((err) => console.log("Clarifai error:", err));
+      .catch((err) => console.log("API error:", err));
   };
 
   render() {
@@ -148,7 +127,7 @@ class App extends Component {
         )}
       </div>
     );
-  } // ✅ closes render()
-} // ✅ closes class App
+  }
+}
 
 export default App;
