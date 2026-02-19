@@ -1,43 +1,24 @@
 import "./FaceRecognition.css";
 
-const FaceRecognition = ({ imageUrl, clarifaiBoxes }) => {
-  const boxes = Array.isArray(clarifaiBoxes) ? clarifaiBoxes : [];
-
+const FaceRecognition = ({ imageUrl, box }) => {
   return (
-    <div className="center">
-      <div
-        className="mt2"
-        style={{ position: "relative", display: "inline-block" }}
-      >
-        {imageUrl ? (
-          <>
-            <img
-              id="inputimage"
-              alt="face detection"
-              src={imageUrl}
+    <div className="face-wrap">
+      {imageUrl ? (
+        <div className="image-container">
+          <img id="inputimage" alt="" src={imageUrl} />
+          {box?.leftCol !== undefined && (
+            <div
+              className="bounding-box"
               style={{
-                width: "500px",
-                height: "auto",
-                display: "block", // ✅ prevents baseline spacing offsets
+                top: box.topRow,
+                right: box.rightCol,
+                bottom: box.bottomRow,
+                left: box.leftCol,
               }}
             />
-
-            {boxes.map((box, i) => (
-              <div
-                key={`${i}-${box.leftCol}-${box.topRow}`}
-                className="bounding-box"
-                style={{
-                  position: "absolute", // ✅ ensures overlay
-                  top: box.topRow,
-                  right: box.rightCol,
-                  bottom: box.bottomRow,
-                  left: box.leftCol,
-                }}
-              />
-            ))}
-          </>
-        ) : null}
-      </div>
+          )}
+        </div>
+      ) : null}
     </div>
   );
 };

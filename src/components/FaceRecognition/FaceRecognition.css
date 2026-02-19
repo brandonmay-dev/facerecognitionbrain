@@ -1,3 +1,20 @@
+.face-wrap {
+  display: flex;
+  justify-content: center;
+  margin-top: 24px;
+}
+
+.image-container {
+  position: relative;
+  width: 500px;
+}
+
+.image-container img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
 .bounding-box {
   position: absolute;
   box-shadow: 0 0 0 3px #149df2 inset;

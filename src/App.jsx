@@ -17,6 +17,37 @@ const initialUserState = {
   joined: "",
 };
 
+const API_URL = import.meta.env.VITE_API_URL;
+
+const waitForRenderedImage = async (timeoutMs = 4000) => {
+  const start = Date.now();
+
+  while (Date.now() - start < timeoutMs) {
+    const img = document.getElementById("inputimage");
+
+    if (img) {
+      if (
+        img.complete &&
+        img.naturalWidth > 0 &&
+        img.width > 0 &&
+        img.height > 0
+      ) {
+        return img;
+      }
+
+      await new Promise((resolve) => {
+        const onDone = () => resolve();
+        img.addEventListener("load", onDone, { once: true });
+        img.addEventListener("error", onDone, { once: true });
+      });
+    } else {
+      await new Promise((r) => requestAnimationFrame(r));
+    }
+  }
+
+  return null;
+};
+
 function App() {
   const [input, setInput] = useState("");
   const [imageUrl, setImageUrl] = useState("");
@@ -52,16 +83,14 @@ function App() {
 
   const onInputChange = (event) => setInput(event.target.value);
 
-  const calculateFaceLocation = (data) => {
-    const region = data?.outputs?.[0]?.data?.regions?.[0];
+  const calculateFaceLocation = (clarifaiData, imgEl) => {
+    const region = clarifaiData?.outputs?.[0]?.data?.regions?.[0];
     const boundingBox = region?.region_info?.bounding_box;
-    if (!boundingBox) return {};
+    if (!boundingBox || !imgEl) return {};
 
-    const image = document.getElementById("inputimage");
-    if (!image) return {};
-
-    const width = Number(image.width);
-    const height = Number(image.height);
+    const width = Number(imgEl.width);
+    const height = Number(imgEl.height);
+    if (!width || !height) return {};
 
     return {
       leftCol: boundingBox.left_col * width,
@@ -76,7 +105,7 @@ function App() {
     setBox({});
 
     try {
-      const clarifaiRes = await fetch("http://localhost:3001/imageurl", {
+      const clarifaiRes = await fetch(`${API_URL}/imageurl`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ input }),
@@ -84,14 +113,16 @@ function App() {
 
       const clarifaiData = await clarifaiRes.json();
 
-      const faceBox = calculateFaceLocation(clarifaiData);
+      const imgEl = await waitForRenderedImage();
+      const faceBox = calculateFaceLocation(clarifaiData, imgEl);
       setBox(faceBox);
 
       const hasFace = Boolean(
         clarifaiData?.outputs?.[0]?.data?.regions?.length,
       );
+
       if (hasFace && user.id) {
-        const entriesRes = await fetch("http://localhost:3001/image", {
+        const entriesRes = await fetch(`${API_URL}/image`, {
           method: "PUT",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ id: user.id }),
