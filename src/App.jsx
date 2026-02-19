@@ -1,126 +1,132 @@
-import React, { Component } from "react";
-import FaceRecognition from "./components/FaceRecognition/FaceRecognition.jsx";
+import { useState } from "react";
 import Navigation from "./components/Navigation/Navigation.jsx";
-import Signin from "./components/Signin/Signin.jsx";
-import Register from "./components/Register/Register.jsx";
 import Logo from "./components/Logo/Logo.jsx";
 import ImageLinkForm from "./components/ImageLinkForm/ImageLinkForm.jsx";
 import Rank from "./components/Rank/Rank.jsx";
+import FaceRecognition from "./components/FaceRecognition/FaceRecognition.jsx";
+import Signin from "./components/Signin/Signin.jsx";
+import Register from "./components/Register/Register.jsx";
 import ParticlesBg from "particles-bg";
 import "./App.css";
 
-class App extends Component {
-  constructor() {
-    super();
-    this.state = {
-      input: "",
-      imageUrl: "",
-      clarifaiBoxes: [],
-      route: "signin",
-      isSignedIn: false,
-    };
-  }
+const initialUserState = {
+  id: "",
+  name: "",
+  email: "",
+  entries: 0,
+  joined: "",
+};
 
-  onRouteChange = (route) => {
-    if (route === "signout") {
-      this.setState({
-        isSignedIn: false,
-        route: "signin",
-        imageUrl: "",
-        clarifaiBoxes: [],
-        input: "",
-      });
+function App() {
+  const [input, setInput] = useState("");
+  const [imageUrl, setImageUrl] = useState("");
+  const [box, setBox] = useState({});
+  const [route, setRoute] = useState("signin");
+  const [isSignedIn, setIsSignedIn] = useState(false);
+  const [user, setUser] = useState(initialUserState);
+
+  const loadUser = (data) => {
+    setUser({
+      id: data.id,
+      name: data.name,
+      email: data.email,
+      entries: data.entries,
+      joined: data.joined,
+    });
+  };
+
+  const onRouteChange = (newRoute) => {
+    if (newRoute === "signout") {
+      setIsSignedIn(false);
+      setUser(initialUserState);
+      setInput("");
+      setImageUrl("");
+      setBox({});
+      setRoute("signin");
       return;
     }
 
-    if (route === "home") this.setState({ isSignedIn: true });
-    else this.setState({ isSignedIn: false });
-
-    this.setState({ route });
+    if (newRoute === "home") setIsSignedIn(true);
+    setRoute(newRoute);
   };
 
-  onInputChange = (event) => {
-    this.setState({ input: event.target.value });
-  };
+  const onInputChange = (event) => setInput(event.target.value);
 
-  calculateFaceLocations = (data) => {
-    const regions = data?.outputs?.[0]?.data?.regions || [];
-    if (!regions.length) return [];
+  const calculateFaceLocation = (data) => {
+    const region = data?.outputs?.[0]?.data?.regions?.[0];
+    const boundingBox = region?.region_info?.bounding_box;
+    if (!boundingBox) return {};
 
     const image = document.getElementById("inputimage");
-    if (!image) return [];
+    if (!image) return {};
 
-    const { width, height } = image.getBoundingClientRect();
+    const width = Number(image.width);
+    const height = Number(image.height);
 
-    return regions
-      .map((r) => r?.region_info?.bounding_box)
-      .filter(Boolean)
-      .map((b) => {
-        const leftCol = b.left_col * width;
-        const topRow = b.top_row * height;
-        const rightCol = width - b.right_col * width;
-        const bottomRow = height - b.bottom_row * height;
+    return {
+      leftCol: boundingBox.left_col * width,
+      topRow: boundingBox.top_row * height,
+      rightCol: width - boundingBox.right_col * width,
+      bottomRow: height - boundingBox.bottom_row * height,
+    };
+  };
 
-        return { leftCol, topRow, rightCol, bottomRow };
+  const onButtonsubmit = async () => {
+    setImageUrl(input);
+    setBox({});
+
+    try {
+      const clarifaiRes = await fetch("http://localhost:3001/imageurl", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input }),
       });
+
+      const clarifaiData = await clarifaiRes.json();
+
+      const faceBox = calculateFaceLocation(clarifaiData);
+      setBox(faceBox);
+
+      const hasFace = Boolean(
+        clarifaiData?.outputs?.[0]?.data?.regions?.length,
+      );
+      if (hasFace && user.id) {
+        const entriesRes = await fetch("http://localhost:3001/image", {
+          method: "PUT",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ id: user.id }),
+        });
+
+        const entriesCount = await entriesRes.json();
+        setUser((prev) => ({ ...prev, entries: entriesCount }));
+      }
+    } catch (err) {
+      console.log("Detect error:", err);
+    }
   };
 
-  displayFaceBoxes = (boxes) => {
-    this.setState({ clarifaiBoxes: boxes });
-  };
+  return (
+    <div>
+      <ParticlesBg type="cobweb" bg={true} />
 
-  onButtonsubmit = () => {
-    const imageUrl = this.state.input;
-
-    // show image immediately, clear old boxes
-    this.setState({ imageUrl, clarifaiBoxes: [] });
-
-    // ✅ call YOUR backend (no CORS)
-    fetch("http://localhost:3001/imageurl", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ input: imageUrl }),
-    })
-      .then((res) => res.json())
-      .then((data) => {
-        const boxes = this.calculateFaceLocations(data);
-        this.displayFaceBoxes(boxes);
-      })
-      .catch((err) => console.log("API error:", err));
-  };
-
-  render() {
-    const { isSignedIn, imageUrl, clarifaiBoxes, route } = this.state;
-
-    return (
-      <div>
-        <ParticlesBg type="cobweb" bg={true} />
-        <Navigation
-          isSignedIn={isSignedIn}
-          onRouteChange={this.onRouteChange}
-        />
-
-        {route === "home" ? (
-          <>
-            <Logo />
-            <Rank />
-            <ImageLinkForm
-              onInputChange={this.onInputChange}
-              onButtonsubmit={this.onButtonsubmit}
-            />
-            <FaceRecognition
-              imageUrl={imageUrl}
-              clarifaiBoxes={clarifaiBoxes}
-            />
-          </>
-        ) : route === "signin" ? (
-          <Signin onRouteChange={this.onRouteChange} />
-        ) : (
-          <Register onRouteChange={this.onRouteChange} />
-        )}
-      </div>
-    );
-  }
+      {route === "home" ? (
+        <>
+          <Navigation isSignedIn={isSignedIn} onRouteChange={onRouteChange} />
+          <Logo />
+          <Rank name={user.name} entries={user.entries} />
+          <ImageLinkForm
+            onInputChange={onInputChange}
+            onButtonsubmit={onButtonsubmit}
+          />
+          <FaceRecognition imageUrl={imageUrl} box={box} />
+        </>
+      ) : route === "register" ? (
+        <Register loadUser={loadUser} onRouteChange={onRouteChange} />
+      ) : (
+        <Signin loadUser={loadUser} onRouteChange={onRouteChange} />
+      )}
+    </div>
+  );
 }
 
 export default App;

@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-const Register = ({ onRouteChange }) => {
+const Register = ({ onRouteChange, loadUser }) => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -10,25 +10,30 @@ const Register = ({ onRouteChange }) => {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        name,
-        email,
+        name: name.trim(),
+        email: email.trim(),
         password,
       }),
     })
-      .then((res) => {
+      .then(async (res) => {
+        const data = await res.json().catch(() => null);
+
         if (!res.ok) {
-          throw new Error("register failed");
+          console.log("Register failed:", data);
+          throw new Error(typeof data === "string" ? data : "register failed");
         }
-        return res.json();
+
+        return data;
       })
       .then((user) => {
         if (user && user.id) {
+          loadUser(user);
           onRouteChange("home");
         }
       })
       .catch((err) => {
-        console.log("Register error:", err);
-        alert("Unable to register");
+        console.log("Register error:", err.message);
+        alert(err.message);
       });
   };
 
@@ -74,6 +79,15 @@ const Register = ({ onRouteChange }) => {
               type="submit"
               value="Register"
             />
+          </div>
+
+          <div className="lh-copy mt3">
+            <p
+              onClick={() => onRouteChange("signin")}
+              className="f6 link dim black db pointer"
+            >
+              Sign In
+            </p>
           </div>
         </div>
       </main>
