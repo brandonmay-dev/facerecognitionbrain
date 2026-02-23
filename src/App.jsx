@@ -88,8 +88,8 @@ function App() {
     const boundingBox = region?.region_info?.bounding_box;
     if (!boundingBox || !imgEl) return {};
 
-    const width = Number(imgEl.width);
-    const height = Number(imgEl.height);
+    const width = imgEl.clientWidth;
+    const height = imgEl.clientHeight;
     if (!width || !height) return {};
 
     return {
