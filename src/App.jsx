@@ -128,8 +128,8 @@ function App() {
           body: JSON.stringify({ id: user.id }),
         });
 
-        const entriesCount = await entriesRes.json();
-        setUser((prev) => ({ ...prev, entries: entriesCount }));
+        const entriesData = await entriesRes.json();
+        setUser((prev) => ({ ...prev, entries: entriesData.entries }));
       }
     } catch (err) {
       console.log("Detect error:", err);
