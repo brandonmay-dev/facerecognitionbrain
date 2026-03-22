@@ -8,26 +8,31 @@ const Signin = ({ onRouteChange, loadUser }) => {
     fetch("http://localhost:3001/signin", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email,
-        password,
-      }),
+      body: JSON.stringify({ email, password }),
     })
-      .then((res) => {
+      .then(async (res) => {
+        const text = await res.text(); // read body no matter what
+        console.log("signin status:", res.status);
+        console.log("signin response:", text);
+
         if (!res.ok) {
-          throw new Error("signin failed");
+          // show the real backend message
+          throw new Error(text);
         }
-        return res.json();
+
+        return JSON.parse(text);
       })
       .then((user) => {
         if (user && user.id) {
           loadUser(user);
           onRouteChange("home");
+        } else {
+          throw new Error("No user.id returned");
         }
       })
       .catch((err) => {
-        console.log("Signin error:", err);
-        alert("Wrong credentials");
+        console.log("Signin error:", err.message || err);
+        alert(err.message || "Wrong credentials");
       });
   };
 
