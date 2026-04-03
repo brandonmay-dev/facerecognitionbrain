@@ -1,7 +1,10 @@
-import { defineConfig } from 'vite'
-import react from '@vitejs/plugin-react'
+import { defineConfig } from "vite";
+import react from "@vitejs/plugin-react";
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-})
+  preview: {
+    host: true,
+    allowedHosts: ["smart-brain-app-32fac457676f.herokuapp.com"],
+  },
+});
