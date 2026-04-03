@@ -2,7 +2,12 @@ import "./ImageLinkForm.css";
 
 const ImageLinkForm = ({ onInputChange, onButtonsubmit }) => {
   return (
-    <div>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        onButtonsubmit();
+      }}
+    >
       <p className="f3">
         This Magic Brain will detect faces in your pictures. Give it a try.
       </p>
@@ -14,13 +19,13 @@ const ImageLinkForm = ({ onInputChange, onButtonsubmit }) => {
           onChange={onInputChange}
         />
         <button
+          type="submit"
           className="w-30 grow f4 link ph3 pv2 dib white bg-light-purple"
-          onClick={onButtonsubmit}
         >
           Detect
         </button>
       </div>
-    </div>
+    </form>
   );
 };
 
