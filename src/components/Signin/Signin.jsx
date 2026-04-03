@@ -4,8 +4,12 @@ const Signin = ({ onRouteChange, loadUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const API_URL =
+    import.meta.env.VITE_API_URL ||
+    "https://safe-dawn-54877-2bdeb01ab080.herokuapp.com";
+
   const onSubmitSignIn = () => {
-    fetch(`${import.meta.env.VITE_API_URL}/signin`, {
+    fetch(`${API_URL}/signin`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
