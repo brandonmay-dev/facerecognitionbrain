@@ -1,81 +1,100 @@
 # FaceRecognitionBrain
 
-FaceRecognitionBrain is a full-stack face-detection application that lets users register, sign in, submit an image URL, detect a face in the image, and track how many images they have processed. It was built as a portfolio project to show frontend, backend, database, and third-party API integration skills in one product.
+A full-stack face detection application that uses AI to identify faces in images, with real-time visual feedback and persistent user tracking.
 
-- Frontend repo: [facerecognitionbrain](https://github.com/brandonmay-dev/facerecognitionbrain)
-- Backend repo: [facerecognitionbrain-api](https://github.com/brandonmay-dev/facerecognitionbrain-api)
-- Live demo: [smart-brain-app-32fac457676f.herokuapp.com](https://smart-brain-app-32fac457676f.herokuapp.com/)
-- Live API: [safe-dawn-54877-2bdeb01ab080.herokuapp.com](https://safe-dawn-54877-2bdeb01ab080.herokuapp.com/)
+👉 **Frontend Repo:** https://github.com/brandonmay-dev/facerecognitionbrain
+👉 **Backend API:** https://github.com/brandonmay-dev/facerecognitionbrain-api
+👉 **Live Demo:** _(add when deployed)_
+
+---
 
 ## Why This Project Stands Out
 
-This project goes beyond a UI demo and shows full-stack development across the full request lifecycle:
+This isn’t just a UI demo — it demonstrates full-stack development across the entire request lifecycle:
 
 - Building a responsive React frontend
-- Designing and consuming REST APIs
+- Designing and consuming RESTful APIs
 - Implementing authentication flows
 - Persisting user data with PostgreSQL
-- Integrating a third-party AI service through Clarifai
-- Managing deployment-ready environment configuration
+- Integrating a third-party AI service (Clarifai)
+- Managing environment-based configuration for deployment
+
+---
+
+## Key Highlights
+
+- Real-time face detection using an external AI model
+- Full authentication system with persistent user tracking
+- End-to-end data flow: client → server → third-party API → UI
+- Dynamic bounding box rendering based on image analysis
+- Separation of concerns between frontend and backend services
+
+---
 
 ## What The App Does
 
-- Lets users register and sign in
-- Accepts a public image URL
-- Sends the image to the backend for face detection
-- Draws a bounding box around the detected face
-- Updates and displays the user's image submission count
+- Users can register and sign in securely
+- Submit an image URL for processing
+- Detect a face within the image using AI
+- Render a bounding box around the detected face
+- Track how many images each user has processed
+
+---
 
 ## Tech Stack
 
 ### Frontend
 
-- React 19
-- Vite
-- JavaScript
-- Tachyons
-- `particles-bg`
-- `react-parallax-tilt`
+- **React 19** – component-based UI and state management
+- **Vite** – fast development server and optimized builds
+- **JavaScript (ES6+)**
+- **Tachyons** – utility-first CSS for rapid styling
+- `particles-bg`, `react-parallax-tilt` – UI enhancements
 
 ### Backend
 
-- Node.js
-- Express
-- PostgreSQL
-- Knex
-- bcryptjs
+- **Node.js + Express** – REST API and server logic
+- **PostgreSQL** – relational database for user data
+- **Knex** – SQL query builder
+- **bcryptjs** – password hashing and authentication
 
 ### External Service
 
-- Clarifai face-detection model
+- **Clarifai API** – face detection model
 
-## How The System Works
+---
 
-1. The frontend collects a user's credentials or image URL.
-2. The Express API validates the request and interacts with PostgreSQL when needed.
-3. For face detection, the backend sends the image URL to Clarifai.
-4. The backend returns Clarifai's response to the frontend.
-5. The React app converts normalized coordinates into browser pixel values and overlays the face box.
-6. The backend increments the signed-in user's `entries` count in the database.
+## Request Flow (How It Works)
+
+1. User submits credentials or an image URL
+2. Backend validates request and interacts with PostgreSQL
+3. Image URL is sent to Clarifai for face detection
+4. Clarifai response is returned to the backend
+5. Frontend calculates bounding box coordinates
+6. UI renders detected face and updates user entry count
+
+---
 
 ## API Endpoints
 
-- `POST /register`
-- `POST /signin`
-- `POST /imageurl`
-- `PUT /image`
-- `GET /profile/:id`
+- `POST /register` – create new user
+- `POST /signin` – authenticate user
+- `POST /imageurl` – process image via Clarifai
+- `PUT /image` – update user entry count
+- `GET /profile/:id` – retrieve user profile
+
+---
 
 ## Running Locally
 
-### 1. Start the backend
+### 1. Start the Backend
 
 ```bash
 cd ../facerecognitionbrain_api
 npm install
 ```
 
-Create a `.env` file:
+Create `.env`:
 
 ```env
 CLARIFAI_PAT=your_clarifai_pat
@@ -87,81 +106,61 @@ DB_PASSWORD=your_postgres_password
 PORT=3001
 ```
 
-Run the API:
+Run:
 
 ```bash
 npm run dev
 ```
 
-### 2. Start the frontend
+---
+
+### 2. Start the Frontend
 
 ```bash
 npm install
 ```
 
-Create a `.env` file:
+Create `.env`:
 
 ```env
 VITE_API_URL=http://localhost:3001
 ```
 
-Run the frontend:
+Run:
 
 ```bash
 npm run dev
 ```
 
-The app runs at `http://localhost:5173`.
-
-## Build For Production
-
-```bash
-npm run build
-npm run preview
-```
+---
 
 ## What This Project Demonstrates
 
-- Full-stack application architecture with clear client/server separation
+- Full-stack application architecture (client + server separation)
 - Authentication and secure password handling
-- Database integration and persistent user state
-- Third-party API integration and response transformation
+- Database integration and persistent state
+- Third-party API integration and data transformation
 - Translating backend data into dynamic UI visuals
 - Environment configuration for local and deployed setups
 
-## Troubleshooting
-
-### `VITE_API_URL` issues
-
-Make sure `VITE_API_URL` points to a running backend server.
-
-### `403 Forbidden`
-
-Make sure the frontend domain is allowed by the backend CORS configuration.
-
-### Sign-in issues
-
-Check the backend logs, database connection, and stored user records.
+---
 
 ## Future Improvements
 
-- Add screenshots or a short demo GIF near the top
+- Add screenshots or demo GIF for quick visual context
+- Deploy frontend + backend for live demo
 - Add loading, empty, and error states
 - Support multiple face detections per image
 - Add automated tests for auth and API flows
-- Add database migrations and schema documentation
-- Support image upload in addition to image URLs
+- Document database schema and migrations
+
+---
 
 ## About Me
 
 I’m a full-stack developer focused on building real-world applications that integrate APIs, databases, and modern frontend frameworks.
 
-I’m actively seeking junior full-stack, frontend, or software engineering roles.
+I’m actively seeking **junior full-stack, frontend, or software engineering roles (remote-friendly)**.
 
-## Author
-
-Brandon May
-
-## License
-
-MIT
+👉 Let’s connect on LinkedIn
+👉 Explore more projects on my GitHub
