@@ -10,9 +10,9 @@ A full-stack face detection application that uses AI to identify faces in images
 
 ## Walkthrough
 
-Click the thumbnail below to watch the walkthrough:
+Watch the project walkthrough on Vimeo:
 
-[![Smart Brain Walkthrough Thumbnail](./demo/Smart_Brain_Walkthrough_Thumbnail.png)](https://raw.githubusercontent.com/brandonmay-dev/facerecognitionbrain/main/demo/Smart_Brain_Walkthrough.mp4)
+[![Smart Brain Walkthrough Thumbnail](./demo/Smart_Brain_Walkthrough_Thumbnail.png)](https://vimeo.com/1188742900)
 
 ---
 
