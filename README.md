@@ -2,9 +2,9 @@
 
 A full-stack face detection application that uses AI to identify faces in images, with real-time visual feedback and persistent user tracking.
 
-👉 **Frontend Repo:** https://github.com/brandonmay-dev/facerecognitionbrain
-👉 **Backend API:** https://github.com/brandonmay-dev/facerecognitionbrain-api
-👉 **Live Demo:** https://smart-brain-app-32fac457676f.herokuapp.com/
+- 👉 **Frontend Repo:** [facerecognitionbrain](https://github.com/brandonmay-dev/facerecognitionbrain)
+- 👉 **Backend API:** [facerecognitionbrain-api](https://github.com/brandonmay-dev/facerecognitionbrain-api)
+- 👉 **Live Demo:** [smart-brain-app-32fac457676f.herokuapp.com](https://smart-brain-app-32fac457676f.herokuapp.com/)
 
 ---
 
