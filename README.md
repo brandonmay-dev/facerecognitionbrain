@@ -8,6 +8,14 @@ A full-stack face detection application that uses AI to identify faces in images
 
 ---
 
+## Walkthrough
+
+Click the thumbnail below to watch the walkthrough:
+
+[![Smart Brain Walkthrough Thumbnail](./demo/Smart_Brain_Walkthrough_Thumbnail.png)](./demo/Smart_Brain_Walkthrough.mp4)
+
+---
+
 ## Why This Project Stands Out
 
 This isn’t just a UI demo — it demonstrates full-stack development across the entire request lifecycle:
