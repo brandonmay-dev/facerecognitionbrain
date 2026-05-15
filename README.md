@@ -1,9 +1,9 @@
-# FaceRecognitionBrain
+# Smart Brain
 
 A full-stack face detection application that uses AI to identify faces in images, with real-time visual feedback and persistent user tracking.
 
-- 👉 **Frontend Repo:** [facerecognitionbrain](https://github.com/brandonmay-dev/facerecognitionbrain)
-- 👉 **Backend API:** [facerecognitionbrain-api](https://github.com/brandonmay-dev/facerecognitionbrain-api)
+- 👉 **Frontend Repo:** [smart-brain](https://github.com/brandonmay-dev/smart-brain)
+- 👉 **Backend API:** [smart-brain-api](https://github.com/brandonmay-dev/smart-brain-api)
 - 👉 **Live Demo:** [smart-brain-app-32fac457676f.herokuapp.com](https://smart-brain-app-32fac457676f.herokuapp.com/)
 
 ---
@@ -98,7 +98,7 @@ This isn’t just a UI demo — it demonstrates full-stack development across th
 ### 1. Start the Backend
 
 ```bash
-cd ../facerecognitionbrain_api
+cd ../smart-brain-api
 npm install
 ```
 

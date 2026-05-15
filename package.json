@@ -1,5 +1,5 @@
 {
-  "name": "facerecognitionbrain",
+  "name": "smart-brain",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -31,17 +31,17 @@
     "eslint-plugin-react-refresh": "^0.4.24",
     "globals": "^16.5.0"
   },
-  "description": "This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.",
+  "description": "Smart Brain frontend for a full-stack AI face-detection application.",
   "main": "eslint.config.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/brandonmay-dev/facerecognitionbrain.git"
+    "url": "git+https://github.com/brandonmay-dev/smart-brain.git"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "bugs": {
-    "url": "https://github.com/brandonmay-dev/facerecognitionbrain/issues"
+    "url": "https://github.com/brandonmay-dev/smart-brain/issues"
   },
-  "homepage": "https://github.com/brandonmay-dev/facerecognitionbrain#readme"
+  "homepage": "https://github.com/brandonmay-dev/smart-brain#readme"
 }
