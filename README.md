@@ -12,7 +12,7 @@ A full-stack face detection application that uses AI to identify faces in images
 
 Watch the project walkthrough on Vimeo:
 
-[![Smart Brain Walkthrough Thumbnail](./demo/Smart_Brain_Walkthrough_Thumbnail.png)](https://vimeo.com/1188742900)
+[![Smart Brain Walkthrough Thumbnail](./demo/Smart_Brain_Walkthrough_Thumbnail.png)](https://youtu.be/QchHpavFO8w)
 
 ---
 
