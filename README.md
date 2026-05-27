@@ -4,7 +4,7 @@ A full-stack face detection application that uses AI to identify faces in images
 
 - 👉 **Frontend Repo:** [smart-brain](https://github.com/brandonmay-dev/smart-brain)
 - 👉 **Backend API:** [smart-brain-api](https://github.com/brandonmay-dev/smart-brain-api)
-- 👉 **Live Demo:** [smart-brain-app-32fac457676f.herokuapp.com](https://smart-brain-app-32fac457676f.herokuapp.com/)
+- 👉 **Live Demo:** [smartbrain.brandonmay.dev](https://smartbrain.brandonmay.dev/)
 
 ---
 
