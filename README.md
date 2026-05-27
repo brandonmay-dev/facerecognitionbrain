@@ -1,6 +1,8 @@
 # Smart Brain
 
-A full-stack face detection application that uses AI to identify faces in images, with real-time visual feedback and persistent user tracking.
+Smart Brain is a full-stack AI face detection application that lets users register, sign in, submit image URLs, detect faces, and track their image submission count.
+
+The app demonstrates a complete full-stack request flow: React frontend, Express API, PostgreSQL database, secure password handling, server-side Clarifai integration, and dynamic face box rendering in the browser.
 
 - 👉 **Frontend Repo:** [smart-brain](https://github.com/brandonmay-dev/smart-brain)
 - 👉 **Backend API:** [smart-brain-api](https://github.com/brandonmay-dev/smart-brain-api)
@@ -10,7 +12,7 @@ A full-stack face detection application that uses AI to identify faces in images
 
 ## Walkthrough
 
-Watch the project walkthrough on Vimeo:
+Watch the project walkthrough:
 
 [![Smart Brain Walkthrough Thumbnail](./demo/Smart_Brain_Walkthrough_Thumbnail.png)](https://youtu.be/QchHpavFO8w)
 
@@ -18,34 +20,41 @@ Watch the project walkthrough on Vimeo:
 
 ## Why This Project Stands Out
 
-This isn’t just a UI demo — it demonstrates full-stack development across the entire request lifecycle:
+Smart Brain is more than a UI-only demo. It shows how a frontend, backend, database, and third-party AI service work together in one application.
+
+This project demonstrates:
 
 - Building a responsive React frontend
-- Designing and consuming RESTful APIs
-- Implementing authentication flows
+- Designing and consuming RESTful API endpoints
+- Implementing user registration and sign-in flows
+- Hashing passwords securely on the backend
 - Persisting user data with PostgreSQL
-- Integrating a third-party AI service (Clarifai)
-- Managing environment-based configuration for deployment
+- Sending protected server-side requests to Clarifai
+- Translating AI response data into visual UI output
+- Managing environment configuration for local and deployed setups
 
 ---
 
 ## Key Highlights
 
-- Real-time face detection using an external AI model
-- Full authentication system with persistent user tracking
-- End-to-end data flow: client → server → third-party API → UI
-- Dynamic bounding box rendering based on image analysis
-- Separation of concerns between frontend and backend services
+- Full-stack authentication flow
+- PostgreSQL-backed user persistence
+- Server-side Clarifai API integration
+- Real-time face box rendering on submitted images
+- User-specific image submission tracking
+- Separate frontend and backend repositories
+- Environment-based deployment configuration
 
 ---
 
 ## What The App Does
 
-- Users can register and sign in securely
-- Submit an image URL for processing
-- Detect a face within the image using AI
-- Render a bounding box around the detected face
-- Track how many images each user has processed
+- Allows users to register and sign in
+- Accepts a public image URL from the user
+- Sends the image URL to the backend for processing
+- Uses Clarifai’s face detection model to analyze the image
+- Renders a bounding box around the detected face
+- Updates and displays the user’s image submission count
 
 ---
 
@@ -53,43 +62,47 @@ This isn’t just a UI demo — it demonstrates full-stack development across th
 
 ### Frontend
 
-- **React 19** – component-based UI and state management
+- **React 19** – component-based UI development
 - **Vite** – fast development server and optimized builds
-- **JavaScript (ES6+)**
-- **Tachyons** – utility-first CSS for rapid styling
-- `particles-bg`, `react-parallax-tilt` – UI enhancements
+- **JavaScript ES6+**
+- **Tachyons** – utility-first CSS styling
+- **particles-bg** – animated background effects
+- **react-parallax-tilt** – interactive UI enhancement
 
 ### Backend
 
-- **Node.js + Express** – REST API and server logic
+- **Node.js** – JavaScript runtime
+- **Express** – REST API routing and server logic
 - **PostgreSQL** – relational database for user data
 - **Knex** – SQL query builder
 - **bcryptjs** – password hashing and authentication
 
 ### External Service
 
-- **Clarifai API** – face detection model
+- **Clarifai API** – AI face detection model
 
 ---
 
-## Request Flow (How It Works)
+## Request Flow
 
-1. User submits credentials or an image URL
-2. Backend validates request and interacts with PostgreSQL
-3. Image URL is sent to Clarifai for face detection
-4. Clarifai response is returned to the backend
-5. Frontend calculates bounding box coordinates
-6. UI renders detected face and updates user entry count
+1. User registers, signs in, or submits an image URL
+2. Frontend sends the request to the Express backend
+3. Backend validates the request and interacts with PostgreSQL when needed
+4. For image detection, the backend sends the image URL to Clarifai
+5. Clarifai returns face detection coordinates
+6. Backend sends the response data back to the frontend
+7. React calculates the bounding box position based on the rendered image size
+8. UI displays the face box and updates the user’s image submission count
 
 ---
 
-## API Endpoints
+## API Endpoints Used By The Frontend
 
-- `POST /register` – create new user
-- `POST /signin` – authenticate user
-- `POST /imageurl` – process image via Clarifai
-- `PUT /image` – update user entry count
-- `GET /profile/:id` – retrieve user profile
+- `POST /register` – create a new user
+- `POST /signin` – authenticate an existing user
+- `POST /imageurl` – send image URL to Clarifai through the backend
+- `PUT /image` – update the user’s image submission count
+- `GET /profile/:id` – retrieve user profile data
 
 ---
 
@@ -97,12 +110,14 @@ This isn’t just a UI demo — it demonstrates full-stack development across th
 
 ### 1. Start the Backend
 
+In the backend repo:
+
 ```bash
 cd ../smart-brain-api
 npm install
 ```
 
-Create `.env`:
+Create a `.env` file:
 
 ```env
 CLARIFAI_PAT=your_clarifai_pat
@@ -114,27 +129,35 @@ DB_PASSWORD=your_postgres_password
 PORT=3001
 ```
 
-Run:
+Run the backend:
 
 ```bash
 npm run dev
+```
+
+The backend runs at:
+
+```text
+http://localhost:3001
 ```
 
 ---
 
 ### 2. Start the Frontend
 
+In this repo:
+
 ```bash
 npm install
 ```
 
-Create `.env`:
+Create a `.env` file:
 
 ```env
 VITE_API_URL=http://localhost:3001
 ```
 
-Run:
+Run the frontend:
 
 ```bash
 npm run dev
@@ -142,33 +165,46 @@ npm run dev
 
 ---
 
+## Deployment Notes
+
+- The frontend is deployed at `smartbrain.brandonmay.dev`
+- The backend API is deployed separately
+- Clarifai credentials are stored on the backend, not exposed in the frontend
+- The frontend uses `VITE_API_URL` to connect to the backend API
+- Backend CORS settings must allow the deployed frontend domain
+
+---
+
 ## What This Project Demonstrates
 
-- Full-stack application architecture (client + server separation)
-- Authentication and secure password handling
-- Database integration and persistent state
-- Third-party API integration and data transformation
-- Translating backend data into dynamic UI visuals
-- Environment configuration for local and deployed setups
+- Building a React frontend around a real backend API
+- Separating frontend and backend responsibilities
+- Implementing authentication and secure password handling
+- Working with PostgreSQL data persistence
+- Protecting third-party API credentials on the server
+- Transforming AI response data into dynamic UI rendering
+- Managing local and production environment variables
+- Deploying a full-stack application across separate services
 
 ---
 
 ## Future Improvements
 
-- Add screenshots or demo GIF for quick visual context
-- Deploy frontend + backend for live demo
 - Add loading, empty, and error states
-- Support multiple face detections per image
-- Add automated tests for auth and API flows
-- Document database schema and migrations
+- Support multiple detected faces per image
+- Add automated tests for auth and API workflows
+- Improve form validation and user feedback
+- Add database migrations and seed files in the backend repo
+- Refactor backend routes into controllers and services
+- Add rate limiting and centralized error handling
 
 ---
 
 ## About Me
 
-I’m a full-stack developer focused on building real-world applications that integrate APIs, databases, and modern frontend frameworks.
+I’m Brandon May, a full-stack developer and Computer Science student focused on building clean, reliable web applications with practical frontend and backend workflows.
 
-I’m actively seeking **junior full-stack, frontend, or software engineering roles (remote-friendly)**.
+I’m currently seeking frontend, full-stack, contract, and remote-friendly developer opportunities.
 
-👉 Let’s connect on LinkedIn
-👉 Explore more projects on my GitHub
+- GitHub: [github.com/brandonmay-dev](https://github.com/brandonmay-dev)
+- LinkedIn: [linkedin.com/in/brandonmaydev](https://www.linkedin.com/in/brandonmaydev)
