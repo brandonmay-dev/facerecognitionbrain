@@ -5,6 +5,9 @@ export default defineConfig({
   plugins: [react()],
   preview: {
     host: true,
-    allowedHosts: ["smart-brain-app-32fac457676f.herokuapp.com"],
+    allowedHosts: [
+      "smart-brain-app-32fac457676f.herokuapp.com",
+      "smartbrain.brandonmay.dev",
+    ],
   },
 });
